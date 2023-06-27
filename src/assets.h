@@ -5,11 +5,8 @@
 class load_Assets
 {
 public:
-    load_Assets()
-    {
-
-        // Background Textures
-        statusBar = LoadTexture("assets/graphics/backgrounds/stats_bar.png");
+    load_Assets(){
+        // Menü Textures
         pauseScreenContinue = LoadTexture("assets/graphics/backgrounds/Pause_02.png");
         pauseScreenRestart = LoadTexture("assets/graphics/backgrounds/Pause_03.png");
         pauseScreenQuit = LoadTexture("assets/graphics/backgrounds/Pause_04.png");
@@ -18,8 +15,7 @@ public:
         mainMenuQuit = LoadTexture("assets/graphics/backgrounds/MainMenu_02.png");
     }
 
-    // Background Textures
-    Texture2D statusBar;
+    // Menü Textures
     Texture2D pauseScreenContinue;
     Texture2D pauseScreenRestart;
     Texture2D pauseScreenQuit;

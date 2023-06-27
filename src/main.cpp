@@ -10,26 +10,22 @@ int main() {
 #ifdef GAME_START_FULLSCREEN
     ToggleFullscreen();
 #endif
+    // Initialization code //
 
     //Pause function
     bool isPaused = false;
 
-
     // Load assets //
     load_Assets loadAssets;
-    draw_func draw;
 
-    // Initialization code //
+    // Draw function
+    draw_func draw;
+    draw.setDrawMap(Level::Kitchen);
+
     // Canvas
     RenderTexture2D canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
     float renderScale{}; //those two are relevant to drawing and code-cleanliness
     Rectangle renderRec{};
-
-    draw.setDrawMap(Level::Kitchen);
-
-    //...............................................
-
-
 
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -43,10 +39,8 @@ int main() {
             // Level Map quick change
             if (IsKeyPressed(KEY_ONE)) {
                 draw.setDrawMap(Level::Kitchen);
-
             } else if (IsKeyPressed(KEY_TWO)) {
                 draw.setDrawMap(Level::Bedroom);
-
             } else if (IsKeyPressed(KEY_THREE)) {
                 draw.setDrawMap(Level::Library);
             }
@@ -73,16 +67,8 @@ int main() {
         BeginTextureMode(canvas);
         { //Within this block is where we draw our app to the canvas.
             ClearBackground(WHITE);
-
-
-
-            //Drawing Status Bar
-            DrawTexture(loadAssets.statusBar, 0, 0, WHITE);
-
             //Drawing Map
             draw.drawMap();
-
-
         }
         EndTextureMode();
         //The following lines put the canvas in the middle of the window and have the negative as black
@@ -101,13 +87,8 @@ int main() {
     } // Main game loop end
 
     // De-initialization here
-    UnloadTexture(draw.kitchenTileset);
-    UnloadTexture(draw.bedroomTileset);
-    UnloadTexture(draw.libraryTileset);
-    UnloadTexture(loadAssets.statusBar);
-
-    // ...
-    // ...
+    draw.unloadMapTextures();
+    UnloadRenderTexture(canvas);
 
     // Close window and OpenGL context
     CloseWindow();

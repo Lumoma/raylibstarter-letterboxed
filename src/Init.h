@@ -13,4 +13,3 @@ enum GameState {
     GameRunning,
     Quit
 };
-
