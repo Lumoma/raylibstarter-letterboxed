@@ -12,35 +12,22 @@ int main() {
 #endif
 
     // Load assets //
-
-    //Kitchen
-    std::filesystem::path mapPathKitchen("assets/graphics/Levelmaps/Level 1/Kitchen_Map.json");
-    Texture2D kitchenTileset = LoadTexture("assets/graphics/Levelmaps/Level 1/Kitchen_Picture2.png");
-
-    //Bedroom
-    std::filesystem::path mapPathBedroom("assets/graphics/Levelmaps/Level 2/Bedroom_Map.json");
-    Texture2D bedroomTileset = LoadTexture("assets/graphics/Levelmaps/Level 2/Bedroom_Picture.png");
-
-    //Library
-    std::filesystem::path mapPathLibrary("assets/graphics/Levelmaps/Level 3/Library_Map.json");
-    Texture2D libraryTileset = LoadTexture("assets/graphics/Levelmaps/Level 3/Library_Picture.png");
-
-    //Background Textures
-    Texture2D statusBar = LoadTexture("assets/graphics/backgrounds/stats_bar.png");
-
+    load_Assets loadAssets;
 
     // Initialization code //
-
-    // Map loading
-    Level currentLevel = Level::Kitchen; // Anfangslevel
-    std::unique_ptr<tson::Map> theMap = t.parse(mapPathKitchen);
-    mapTileset = kitchenTileset;
-
-    //...............................................
-
+    // Canvas
     RenderTexture2D canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
     float renderScale{}; //those two are relevant to drawing and code-cleanliness
     Rectangle renderRec{};
+
+    // Map loading
+    Level currentLevel = Level::Kitchen; // Anfangslevel
+    std::unique_ptr<tson::Map> theMap = t.parse(loadAssets.mapPathKitchen);
+    mapTileset = loadAssets.kitchenTileset;
+
+    //...............................................
+
+
 
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
@@ -54,16 +41,16 @@ int main() {
             // Level Map quick change
             if (IsKeyPressed(KEY_ONE)) {
                 currentLevel = Level::Kitchen;
-                mapTileset = kitchenTileset;
-                theMap = t.parse(mapPathKitchen);
+                mapTileset = loadAssets.kitchenTileset;
+                theMap = t.parse(loadAssets.mapPathKitchen);
             } else if (IsKeyPressed(KEY_TWO)) {
                 currentLevel = Level::Bedroom;
-                mapTileset = bedroomTileset;
-                theMap = t.parse(mapPathBedroom);
+                mapTileset = loadAssets.bedroomTileset;
+                theMap = t.parse(loadAssets.mapPathBedroom);
             } else if (IsKeyPressed(KEY_THREE)) {
                 currentLevel = Level::Library;
-                mapTileset = libraryTileset;
-                theMap = t.parse(mapPathLibrary);
+                mapTileset = loadAssets.libraryTileset;
+                theMap = t.parse(loadAssets.mapPathLibrary);
             }
 
             //Fullscreen logic.
@@ -90,7 +77,7 @@ int main() {
             ClearBackground(WHITE);
 
             //Drawing Status Bar
-            DrawTexture(statusBar, 0, 0, WHITE);
+            DrawTexture(loadAssets.statusBar, 0, 0, WHITE);
 
             DrawMapButOnlyOneLayer("Layer 1", theMap.get(), mapTileset); // draw Layer 1
             DrawMapButOnlyOneLayer("Layer 2", theMap.get(), mapTileset); // draw Layer 2
@@ -120,10 +107,10 @@ int main() {
     } // Main game loop end
 
     // De-initialization here
-    UnloadTexture(bedroomTileset);
-    UnloadTexture(kitchenTileset);
-    UnloadTexture(libraryTileset);
-    UnloadTexture(statusBar);
+    UnloadTexture(loadAssets.kitchenTileset);
+    UnloadTexture(loadAssets.bedroomTileset);
+    UnloadTexture(loadAssets.libraryTileset);
+    UnloadTexture(loadAssets.statusBar);
 
     // ...
     // ...

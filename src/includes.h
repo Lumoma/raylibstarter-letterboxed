@@ -6,5 +6,6 @@
 #include "defines.h"
 #include "draw_functions.h"
 #include "Init.h"
+#include "assets.h"
 
 
