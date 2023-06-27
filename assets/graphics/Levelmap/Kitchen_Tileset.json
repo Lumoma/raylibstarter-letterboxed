@@ -1,0 +1,14 @@
+{ "columns":10,
+ "image":"Kitchen_Picture2.png",
+ "imageheight":736,
+ "imagewidth":320,
+ "margin":0,
+ "name":"Kitchen_Picture2",
+ "spacing":0,
+ "tilecount":230,
+ "tiledversion":"1.10.1",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.10"
+}

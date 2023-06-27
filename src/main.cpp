@@ -1,9 +1,37 @@
 ﻿#include <cstdlib>
 #include <algorithm>
-
+#include "tileson.hpp"
 #include "raylib.h"
-
 #include "config.h"
+
+const int tileSize = 32;
+
+void DrawMapButOnlyOneLayer(const std::string &layername, tson::Map *theMap, Texture &mapTex) {
+    Rectangle sourceRec{};
+    sourceRec.width = tileSize;
+    sourceRec.height = tileSize;
+    Vector2 destVec{};
+    const float yOffset = 2 * tileSize; //offset for the status bar
+    int tilesetColumns = 10;
+    int tileMapColumns = theMap->getSize().x;
+    int tileMapRows = theMap->getSize().y;
+    for (int y = 0; y < tileMapRows; y++) {
+        for (int x = 0; x < tileMapColumns; x++) {
+            int tileData = theMap->getLayer(layername)->getData()[x + y * tileMapColumns] -
+                           1; //-1 because tiled does stuff >:(
+            if (tileData < 0) continue;
+            sourceRec.x = (tileData % tilesetColumns) * tileSize;
+            sourceRec.y = (tileData / tilesetColumns) * tileSize;
+            destVec.x = x * tileSize;
+            destVec.y = yOffset + y * tileSize;
+            DrawTextureRec(mapTex, sourceRec, destVec, WHITE);
+        }
+    }
+}
+
+tson::Tileson t;
+std::filesystem::path path;
+Texture2D mapTileset;
 
 int main() {
     // Raylib initialization
@@ -16,10 +44,18 @@ int main() {
     ToggleFullscreen();
 #endif
 
+    std::filesystem::path mapPathKitchen("assets/graphics/Levelmap/Kitchen_Map.json");
+    Texture2D kitchenTileset = LoadTexture("assets/graphics/Levelmap/Kitchen_Picture2.png");
+
+    std::unique_ptr<tson::Map> theMap = t.parse(mapPathKitchen);
+    mapTileset = kitchenTileset;
+
+    bool keySwitchCol = false;  //Switch um die Collision anzuschalten
+
     // Your own initialization code here
     // ...
     // ...
-    Texture2D myTexture = LoadTexture("assets/graphics/testimage.png");
+
     RenderTexture2D canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
     float renderScale{}; //those two are relevant to drawing and code-cleanliness
     Rectangle renderRec{};
@@ -39,6 +75,11 @@ int main() {
         // Updates that are made by frame are coded here
         // ...
         // ...
+        if (IsKeyPressed(KEY_SPACE) && keySwitchCol == 0) {
+            keySwitchCol = true;
+        } else if (IsKeyPressed(KEY_SPACE) && keySwitchCol == 1) {
+            keySwitchCol = false;
+        }
 
         BeginDrawing();
         // You can draw on the screen between BeginDrawing() and EndDrawing()
@@ -46,8 +87,16 @@ int main() {
         BeginTextureMode(canvas);
         { //Within this block is where we draw our app to the canvas.
             ClearBackground(WHITE);
-            DrawText("Hello, world!", 10, 10, 30, LIGHTGRAY);
-            DrawTexture(myTexture, 10, 100, WHITE);
+            DrawMapButOnlyOneLayer("Layer 1", theMap.get(), kitchenTileset); // Layer 1 wird gezeichnet
+            DrawMapButOnlyOneLayer("Layer 2", theMap.get(), kitchenTileset); // Layer 2 wird gezeichnet
+            DrawMapButOnlyOneLayer("Layer 3", theMap.get(), kitchenTileset); // Layer 3 wird gezeichnet
+            DrawMapButOnlyOneLayer("Torch", theMap.get(), kitchenTileset); // Layer Torch wird gezeichnet
+            DrawMapButOnlyOneLayer("Items", theMap.get(), kitchenTileset); // Layer Light wird gezeichnet
+            if (keySwitchCol == 1) {
+                DrawMapButOnlyOneLayer("Collision", theMap.get(),
+                                       kitchenTileset); // Layer 3 für Collision wird gezeichnet
+            }
+
         }
         EndTextureMode();
         //The following lines put the canvas in the middle of the window and have the negative as black
@@ -68,7 +117,7 @@ int main() {
     // De-initialization here
     // ...
     // ...
-    UnloadTexture(myTexture);
+    UnloadTexture(kitchenTileset);
 
     // Close window and OpenGL context
     CloseWindow();
