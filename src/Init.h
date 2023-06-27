@@ -2,10 +2,6 @@
 
 #include "includes.h"
 
-tson::Tileson t;
-std::filesystem::path path;
-Texture2D mapTileset;
-
 enum class Level {
     Kitchen,
     Bedroom,
@@ -18,8 +14,3 @@ enum GameState {
     Quit
 };
 
-//Pause function
-bool isPaused = false;
-
-//Switch for Collision Layer
-bool keySwitchCol = false;

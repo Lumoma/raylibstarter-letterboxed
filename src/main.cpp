@@ -11,8 +11,13 @@ int main() {
     ToggleFullscreen();
 #endif
 
+    //Pause function
+    bool isPaused = false;
+
+
     // Load assets //
     load_Assets loadAssets;
+    draw_func draw;
 
     // Initialization code //
     // Canvas
@@ -20,10 +25,7 @@ int main() {
     float renderScale{}; //those two are relevant to drawing and code-cleanliness
     Rectangle renderRec{};
 
-    // Map loading
-    Level currentLevel = Level::Kitchen; // Anfangslevel
-    std::unique_ptr<tson::Map> theMap = t.parse(loadAssets.mapPathKitchen);
-    mapTileset = loadAssets.kitchenTileset;
+    draw.setDrawMap(Level::Kitchen);
 
     //...............................................
 
@@ -40,17 +42,13 @@ int main() {
 
             // Level Map quick change
             if (IsKeyPressed(KEY_ONE)) {
-                currentLevel = Level::Kitchen;
-                mapTileset = loadAssets.kitchenTileset;
-                theMap = t.parse(loadAssets.mapPathKitchen);
+                draw.setDrawMap(Level::Kitchen);
+
             } else if (IsKeyPressed(KEY_TWO)) {
-                currentLevel = Level::Bedroom;
-                mapTileset = loadAssets.bedroomTileset;
-                theMap = t.parse(loadAssets.mapPathBedroom);
+                draw.setDrawMap(Level::Bedroom);
+
             } else if (IsKeyPressed(KEY_THREE)) {
-                currentLevel = Level::Library;
-                mapTileset = loadAssets.libraryTileset;
-                theMap = t.parse(loadAssets.mapPathLibrary);
+                draw.setDrawMap(Level::Library);
             }
 
             //Fullscreen logic.
@@ -66,7 +64,7 @@ int main() {
 
             // Switch for Collision Layer
             if (IsKeyPressed(KEY_SPACE))
-                keySwitchCol = !keySwitchCol;
+                draw.keySwitchCol = !draw.keySwitchCol;
         }
 
         BeginDrawing();
@@ -76,18 +74,14 @@ int main() {
         { //Within this block is where we draw our app to the canvas.
             ClearBackground(WHITE);
 
+
+
             //Drawing Status Bar
             DrawTexture(loadAssets.statusBar, 0, 0, WHITE);
 
-            DrawMapButOnlyOneLayer("Layer 1", theMap.get(), mapTileset); // draw Layer 1
-            DrawMapButOnlyOneLayer("Layer 2", theMap.get(), mapTileset); // draw Layer 2
-            //DrawMapButOnlyOneLayer("Layer 3", theMap.get(), mapTileset); // draw Layer 3
-            DrawMapButOnlyOneLayer("Torch", theMap.get(), mapTileset); // draw Layer Torch
-            //DrawMapButOnlyOneLayer("Items", theMap.get(), mapTileset); // draw Layer Light
-            if (keySwitchCol == 1)
-            {
-                DrawMapButOnlyOneLayer("Collision", theMap.get(),mapTileset); // draw Collision Layer
-            }
+            //Drawing Map
+            draw.drawMap();
+
 
         }
         EndTextureMode();
@@ -107,9 +101,9 @@ int main() {
     } // Main game loop end
 
     // De-initialization here
-    UnloadTexture(loadAssets.kitchenTileset);
-    UnloadTexture(loadAssets.bedroomTileset);
-    UnloadTexture(loadAssets.libraryTileset);
+    UnloadTexture(draw.kitchenTileset);
+    UnloadTexture(draw.bedroomTileset);
+    UnloadTexture(draw.libraryTileset);
     UnloadTexture(loadAssets.statusBar);
 
     // ...

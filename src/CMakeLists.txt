@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(${PROJECT_NAME} main.cpp Init.h draw_functions.h includes.h defines.h assets.h)
+add_executable(${PROJECT_NAME} main.cpp Init.h includes.h defines.h assets.h draw_func.cpp draw_func.h)
 
 # Add config.h.in file
 configure_file(config.h.in config.h)

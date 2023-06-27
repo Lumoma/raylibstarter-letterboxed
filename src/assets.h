@@ -7,17 +7,6 @@ class load_Assets
 public:
     load_Assets()
     {
-        // Kitchen
-        mapPathKitchen = std::filesystem::path("assets/graphics/Levelmaps/Level 1/Kitchen_Map.json");
-        kitchenTileset = LoadTexture("assets/graphics/Levelmaps/Level 1/Kitchen_Picture2.png");
-
-        // Bedroom
-        mapPathBedroom = std::filesystem::path("assets/graphics/Levelmaps/Level 2/Bedroom_Map.json");
-        bedroomTileset = LoadTexture("assets/graphics/Levelmaps/Level 2/Bedroom_Picture.png");
-
-        // Library
-        mapPathLibrary = std::filesystem::path("assets/graphics/Levelmaps/Level 3/Library_Map.json");
-        libraryTileset = LoadTexture("assets/graphics/Levelmaps/Level 3/Library_Picture.png");
 
         // Background Textures
         statusBar = LoadTexture("assets/graphics/backgrounds/stats_bar.png");
@@ -28,18 +17,6 @@ public:
         mainMenuHighscore = LoadTexture("assets/graphics/backgrounds/MainMenu_03.png");
         mainMenuQuit = LoadTexture("assets/graphics/backgrounds/MainMenu_02.png");
     }
-
-    // Kitchen
-    std::filesystem::path mapPathKitchen;
-    Texture2D kitchenTileset;
-
-    // Bedroom
-    std::filesystem::path mapPathBedroom;
-    Texture2D bedroomTileset;
-
-    // Library
-    std::filesystem::path mapPathLibrary;
-    Texture2D libraryTileset;
 
     // Background Textures
     Texture2D statusBar;
