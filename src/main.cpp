@@ -5,16 +5,6 @@
 
 #include "config.h"
 
-#define MAP_TILE_SIZE    32         // Tiles size 32x32 pixels
-#define PLAYER_SIZE      32         // Player size
-
-// Map data type
-typedef struct Map {
-    unsigned int tilesX;            // Number of tiles in X axis
-    unsigned int tilesY;            // Number of tiles in Y axis
-    unsigned short *tileIds;         // Tile ids (tilesX*tilesY), defines type of tile to draw
-} Map;
-
 int main() {
     // Raylib initialization
     // Project name, screen size, fullscreen mode etc. can be specified in the config.h.in file
