@@ -19,8 +19,7 @@ void draw_func::setDrawMap(Level currentlevel) {
 }
 
 void draw_func::drawMap() {
-    //Drawing Status Bar
-    DrawTexture(statusBar, 0, 0, WHITE);
+    DrawTexture(statusBar, 0, 0, WHITE); // draw status bar
     DrawMapButOnlyOneLayer("Layer 1", theMap.get(), mapTileset); // draw Layer 1
     DrawMapButOnlyOneLayer("Layer 2", theMap.get(), mapTileset); // draw Layer 2
     //DrawMapButOnlyOneLayer("Layer 3", theMap.get(), mapTileset); // draw Layer 3
