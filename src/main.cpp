@@ -1,41 +1,8 @@
-﻿#include <cstdlib>
-#include <algorithm>
-#include "tileson.hpp"
-#include "raylib.h"
-#include "config.h"
-
-const int tileSize = 32;
-
-void DrawMapButOnlyOneLayer(const std::string &layername, tson::Map *theMap, Texture &mapTex) {
-    Rectangle sourceRec{};
-    sourceRec.width = tileSize;
-    sourceRec.height = tileSize;
-    Vector2 destVec{};
-    const float yOffset = 2 * tileSize; //offset for the status bar
-    int tilesetColumns = 10;
-    int tileMapColumns = theMap->getSize().x;
-    int tileMapRows = theMap->getSize().y;
-    for (int y = 0; y < tileMapRows; y++) {
-        for (int x = 0; x < tileMapColumns; x++) {
-            int tileData = theMap->getLayer(layername)->getData()[x + y * tileMapColumns] -
-                           1; //-1 because tiled does stuff >:(
-            if (tileData < 0) continue;
-            sourceRec.x = (tileData % tilesetColumns) * tileSize;
-            sourceRec.y = (tileData / tilesetColumns) * tileSize;
-            destVec.x = x * tileSize;
-            destVec.y = yOffset + y * tileSize;
-            DrawTextureRec(mapTex, sourceRec, destVec, WHITE);
-        }
-    }
-}
-
-tson::Tileson t;
-std::filesystem::path path;
-Texture2D mapTileset;
+﻿#include "includes.h"
 
 int main() {
+
     // Raylib initialization
-    // Project name, screen size, fullscreen mode etc. can be specified in the config.h.in file
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(Game::ScreenWidth, Game::ScreenHeight, Game::PROJECT_NAME);
     SetTargetFPS(60);
@@ -44,17 +11,32 @@ int main() {
     ToggleFullscreen();
 #endif
 
-    std::filesystem::path mapPathKitchen("assets/graphics/Levelmap/Kitchen_Map.json");
-    Texture2D kitchenTileset = LoadTexture("assets/graphics/Levelmap/Kitchen_Picture2.png");
+    // Load assets //
 
+    //Kitchen
+    std::filesystem::path mapPathKitchen("assets/graphics/Levelmaps/Level 1/Kitchen_Map.json");
+    Texture2D kitchenTileset = LoadTexture("assets/graphics/Levelmaps/Level 1/Kitchen_Picture2.png");
+
+    //Bedroom
+    std::filesystem::path mapPathBedroom("assets/graphics/Levelmaps/Level 2/Bedroom_Map.json");
+    Texture2D bedroomTileset = LoadTexture("assets/graphics/Levelmaps/Level 2/Bedroom_Picture.png");
+
+    //Library
+    std::filesystem::path mapPathLibrary("assets/graphics/Levelmaps/Level 3/Library_Map.json");
+    Texture2D libraryTileset = LoadTexture("assets/graphics/Levelmaps/Level 3/Library_Picture.png");
+
+    //Background Textures
+    Texture2D statusBar = LoadTexture("assets/graphics/backgrounds/stats_bar.png");
+
+
+    // Initialization code //
+
+    // Map loading
+    Level currentLevel = Level::Kitchen; // Anfangslevel
     std::unique_ptr<tson::Map> theMap = t.parse(mapPathKitchen);
     mapTileset = kitchenTileset;
 
-    bool keySwitchCol = false;  //Switch um die Collision anzuschalten
-
-    // Your own initialization code here
-    // ...
-    // ...
+    //...............................................
 
     RenderTexture2D canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
     float renderScale{}; //those two are relevant to drawing and code-cleanliness
@@ -63,22 +45,41 @@ int main() {
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
-        if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) { //Fullscreen logic.
-            if (IsWindowFullscreen()) {
-                ToggleFullscreen();
-                SetWindowSize(Game::ScreenWidth,Game::ScreenHeight);
-            } else {
-                SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
-                ToggleFullscreen();
+        //Pause Screen Implementation
+        if (IsKeyPressed(KEY_P))
+            isPaused = !isPaused;
+
+        if(!isPaused) {     //pauses the game while being in pause screen
+
+            // Level Map quick change
+            if (IsKeyPressed(KEY_ONE)) {
+                currentLevel = Level::Kitchen;
+                mapTileset = kitchenTileset;
+                theMap = t.parse(mapPathKitchen);
+            } else if (IsKeyPressed(KEY_TWO)) {
+                currentLevel = Level::Bedroom;
+                mapTileset = bedroomTileset;
+                theMap = t.parse(mapPathBedroom);
+            } else if (IsKeyPressed(KEY_THREE)) {
+                currentLevel = Level::Library;
+                mapTileset = libraryTileset;
+                theMap = t.parse(mapPathLibrary);
             }
-        }
-        // Updates that are made by frame are coded here
-        // ...
-        // ...
-        if (IsKeyPressed(KEY_SPACE) && keySwitchCol == 0) {
-            keySwitchCol = true;
-        } else if (IsKeyPressed(KEY_SPACE) && keySwitchCol == 1) {
-            keySwitchCol = false;
+
+            //Fullscreen logic.
+            if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) {
+                if (IsWindowFullscreen()) {
+                    ToggleFullscreen();
+                    SetWindowSize(Game::ScreenWidth, Game::ScreenHeight);
+                } else {
+                    SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
+                    ToggleFullscreen();
+                }
+            }
+
+            // Switch for Collision Layer
+            if (IsKeyPressed(KEY_SPACE))
+                keySwitchCol = !keySwitchCol;
         }
 
         BeginDrawing();
@@ -87,14 +88,18 @@ int main() {
         BeginTextureMode(canvas);
         { //Within this block is where we draw our app to the canvas.
             ClearBackground(WHITE);
-            DrawMapButOnlyOneLayer("Layer 1", theMap.get(), kitchenTileset); // Layer 1 wird gezeichnet
-            DrawMapButOnlyOneLayer("Layer 2", theMap.get(), kitchenTileset); // Layer 2 wird gezeichnet
-            DrawMapButOnlyOneLayer("Layer 3", theMap.get(), kitchenTileset); // Layer 3 wird gezeichnet
-            DrawMapButOnlyOneLayer("Torch", theMap.get(), kitchenTileset); // Layer Torch wird gezeichnet
-            DrawMapButOnlyOneLayer("Items", theMap.get(), kitchenTileset); // Layer Light wird gezeichnet
-            if (keySwitchCol == 1) {
-                DrawMapButOnlyOneLayer("Collision", theMap.get(),
-                                       kitchenTileset); // Layer 3 für Collision wird gezeichnet
+
+            //Drawing Status Bar
+            DrawTexture(statusBar, 0, 0, WHITE);
+
+            DrawMapButOnlyOneLayer("Layer 1", theMap.get(), mapTileset); // draw Layer 1
+            DrawMapButOnlyOneLayer("Layer 2", theMap.get(), mapTileset); // draw Layer 2
+            //DrawMapButOnlyOneLayer("Layer 3", theMap.get(), mapTileset); // draw Layer 3
+            DrawMapButOnlyOneLayer("Torch", theMap.get(), mapTileset); // draw Layer Torch
+            //DrawMapButOnlyOneLayer("Items", theMap.get(), mapTileset); // draw Layer Light
+            if (keySwitchCol == 1)
+            {
+                DrawMapButOnlyOneLayer("Collision", theMap.get(),mapTileset); // draw Collision Layer
             }
 
         }
@@ -115,9 +120,13 @@ int main() {
     } // Main game loop end
 
     // De-initialization here
-    // ...
-    // ...
+    UnloadTexture(bedroomTileset);
     UnloadTexture(kitchenTileset);
+    UnloadTexture(libraryTileset);
+    UnloadTexture(statusBar);
+
+    // ...
+    // ...
 
     // Close window and OpenGL context
     CloseWindow();
