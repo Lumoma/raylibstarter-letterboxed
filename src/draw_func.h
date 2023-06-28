@@ -2,6 +2,8 @@
 
 #include "includes.h"
 
+/* Draw Class */
+
 class draw_func {
 public:
     draw_func(){
@@ -28,8 +30,10 @@ public:
     void drawCanvasAndMap();
     void unloadMapTextures();
 
+    // Statusbar
     Texture2D statusBar;
 
+    // Canvas
     RenderTexture2D canvas;
     float renderScale{};
     Rectangle renderRec{};
@@ -58,5 +62,14 @@ public:
 private:
     void DrawMapButOnlyOneLayer(const std::string &layername, tson::Map *theMap, Texture &mapTex);
 };
+
+/*! \class draw_func
+ *  \brief Class for drawing.
+ *
+ *  This class is used for drawing the map, the canvas an the status bar.
+ *  It also loads and unloads the textures.
+ *  It also has a switch for showing the collision layer with hotkeys.
+ *
+ */
 
 

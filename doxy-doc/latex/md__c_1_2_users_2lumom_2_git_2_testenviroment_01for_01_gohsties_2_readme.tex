@@ -1,0 +1,54 @@
+\chapter{Readme}
+\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme}{}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme}\index{Readme@{Readme}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ (\_)\ |\ \ \ \ \ \ \ |\ |\ \ \ \ \ \ \ \ \ \ \ |\ |\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \_\ \_\_\ \_\_\ \_\ \_\ \ \ \_|\ |\_|\ |\_\_\ \ \_\_\_|\ |\_\ \_\_\ \_\ \_\ \_\_|\ |\_\ \_\_\_\ \_\ \_\_\ }
+\DoxyCodeLine{|\ '\_\_/\ \_`\ |\ |\ |\ |\ |\ |\ '\_\ \(\backslash\)/\ \_\_|\ \_\_/\ \_`\ |\ '\_\_|\ \_\_/\ \_\ \(\backslash\)\ '\_\_|}
+\DoxyCodeLine{|\ |\ |\ (\_|\ |\ |\_|\ |\ |\ |\ |\_)\ \(\backslash\)\_\_\ \(\backslash\)\ ||\ (\_|\ |\ |\ \ |\ ||\ \ \_\_/\ |\ \ \ }
+\DoxyCodeLine{|\_|\ \ \(\backslash\)\_\_,\_|\(\backslash\)\_\_,\ |\_|\_|\_.\_\_/|\_\_\_/\(\backslash\)\_\_\(\backslash\)\_\_,\_|\_|\ \ \ \(\backslash\)\_\_\(\backslash\)\_\_\_|\_|\ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \_\_/\ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ |\_\_\_/\ \ }
+
+\end{DoxyCode}
+\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md0}{}\doxysection{\texorpdfstring{raylibstarter -\/ minimal letterbox edition}{raylibstarter - minimal letterbox edition}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md0}
+\href{https://github.com/chfhhd/raylibstarter-letterboxed/actions/workflows/cmake.yml}{\texttt{ }}
+
+A simple raylib project template for CMake and C/\+C++ including letterbox rendering and a fullscreen mode.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md1}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md1}
+Use CMake or a CMake compatible development environment to build a minimalistic raylib project. The raylib library will be downloaded automatically by CMake.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md2}{}\doxysubsubsection{\texorpdfstring{Changing the project title and version number}{Changing the project title and version number}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md2}
+The project name and version number can be customized in the {\ttfamily src/\+CMake\+Lists.\+txt} file. By default, the project name is \textquotesingle{}game\textquotesingle{}\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{project(game\ VERSION\ 0.1\ LANGUAGES\ CXX)}
+
+\end{DoxyCode}
+\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md3}{}\doxysubsubsection{\texorpdfstring{Change the window size and switch to fullscreen}{Change the window size and switch to fullscreen}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md3}
+The initial width and height of the output window can be adjusted in the {\ttfamily src/config.\+h.\+in} file.
+
+By removing the comment
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{//\#define\ GAME\_START\_FULLSCREEN}
+
+\end{DoxyCode}
+
+
+the project starts in full screen mode.
+
+While running the user can change the window size with the OS\textquotesingle{}s regular means and switch to fullscreen with left alt + enter.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md4}{}\doxysubsubsection{\texorpdfstring{Manage assets}{Manage assets}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md4}
+Store assets in the designated \textquotesingle{}assets\textquotesingle{} folder. The project already contains a sample graphic file. In the {\ttfamily main.\+cpp} file, this image is loaded and displayed.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md5}{}\doxysubsubsection{\texorpdfstring{Choose a different raylib version}{Choose a different raylib version}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md5}
+Which raylib version is used can be specified in the {\ttfamily cmake/raylib.\+cmake} file. If this is changed after CMake has already created the project once, you must use CMake to completely rebuild the project.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md6}{}\doxysubsubsection{\texorpdfstring{What next?}{What next?}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md6}
+Modify the {\ttfamily main.\+cpp} file according to your needs.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md7}{}\doxysubsubsection{\texorpdfstring{Create a binary distribution}{Create a binary distribution}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md7}
+The cpack command can be used on the command line to create a binary distribution of the project, for example\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cpack\ -\/G\ ZIP\ -\/C\ Debug}
+
+\end{DoxyCode}
+
+
+All assets will be packed into the distribution.\hypertarget{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md8}{}\doxysubsection{\texorpdfstring{License}{License}}\label{md__c_1_2_users_2lumom_2_git_2_testenviroment_01for_01_gohsties_2_readme_autotoc_md8}
+see {\ttfamily LICENCE} file for details. 

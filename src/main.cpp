@@ -2,7 +2,7 @@
 
 int main() {
 
-    // Raylib initialization
+    /// Raylib initialization
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(Game::ScreenWidth, Game::ScreenHeight, Game::PROJECT_NAME);
     SetTargetFPS(60);
@@ -10,7 +10,7 @@ int main() {
 #ifdef GAME_START_FULLSCREEN
     ToggleFullscreen();
 #endif
-    // Initialization code //
+    /// Initialization code ///
 
     //Pause function
     bool isPaused = false;
