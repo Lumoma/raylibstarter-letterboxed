@@ -15,13 +15,22 @@ public:
         mainMenuQuit = LoadTexture("assets/graphics/backgrounds/MainMenu_02.png");
     }
 
+    ~load_Assets(){
+        UnloadTexture(pauseScreenContinue);
+        UnloadTexture(pauseScreenRestart);
+        UnloadTexture(pauseScreenQuit);
+        UnloadTexture(mainMenuStart);
+        UnloadTexture(mainMenuHighscore);
+        UnloadTexture(mainMenuQuit);
+    }
+
     // Menü Textures
-    Texture2D pauseScreenContinue;
-    Texture2D pauseScreenRestart;
-    Texture2D pauseScreenQuit;
-    Texture2D mainMenuStart;
-    Texture2D mainMenuHighscore;
-    Texture2D mainMenuQuit;
+    Texture2D pauseScreenContinue{};
+    Texture2D pauseScreenRestart{};
+    Texture2D pauseScreenQuit{};
+    Texture2D mainMenuStart{};
+    Texture2D mainMenuHighscore{};
+    Texture2D mainMenuQuit{};
 };
 
 

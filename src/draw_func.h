@@ -18,13 +18,21 @@ public:
         // Library
         libraryTileset = LoadTexture("assets/graphics/Levelmaps/Level 3/Library_Picture.png");
         mapPathLibrary = std::filesystem::path("assets/graphics/Levelmaps/Level 3/Library_Map.json");
+
+        // Canvas
+        canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
     }
 
     void setDrawMap(Level currentlevel);
     void drawMap();
+    void drawCanvasAndMap();
     void unloadMapTextures();
 
     Texture2D statusBar;
+
+    RenderTexture2D canvas;
+    float renderScale{};
+    Rectangle renderRec{};
 
     // Kitchen
     Texture2D kitchenTileset;
