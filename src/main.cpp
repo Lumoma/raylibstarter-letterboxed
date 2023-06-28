@@ -12,33 +12,21 @@ int main() {
 #endif
     /// Initialization code ///
 
-    //Pause function
-    bool isPaused = false;
-
-    // Load assets //
-    load_Assets loadAssets;
-
     // Draw function
     draw_func draw;
-    draw.setDrawMap(Level::Kitchen);
+    draw.initGameStateAndMap();
 
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
         //Pause Screen Implementation
         if (IsKeyPressed(KEY_P))
-            isPaused = !isPaused;
+            draw.isPaused = !draw.isPaused;
 
-        if(!isPaused) {     //pauses the game while being in pause screen
+        if(!draw.isPaused) {     //pauses the game while being in pause screen
 
-            // Level Map quick change
-            if (IsKeyPressed(KEY_ONE)) {
-                draw.setDrawMap(Level::Kitchen);
-            } else if (IsKeyPressed(KEY_TWO)) {
-                draw.setDrawMap(Level::Bedroom);
-            } else if (IsKeyPressed(KEY_THREE)) {
-                draw.setDrawMap(Level::Library);
-            }
+            // Update LevelMap
+            draw.switchLevelMap();
 
             //Fullscreen logic.
             if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) {
@@ -65,8 +53,7 @@ int main() {
     } // Main game loop end
 
     // De-initialization here
-    draw.unloadMapTextures();
-    loadAssets.~load_Assets();
+    draw.~draw_func();
 
     // Close window and OpenGL context
     CloseWindow();
