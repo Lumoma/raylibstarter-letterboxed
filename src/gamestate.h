@@ -43,9 +43,8 @@ public:
         Quit
     };
 
-    GameState* pGameState;
-
     void setGameState(GameState gameState);
+    GameState currentGameState;
 
     enum MainMenuSelection {
         M_Start = 0,
@@ -53,20 +52,22 @@ public:
         M_Quit = 2
     };
 
-    void setMainMenuSelection(MainMenuSelection mainMenuSelection);
-
     enum PauseMenuSelection {
         P_Continue = 0,
         P_Restart = 1,
         P_Quit = 2
     };
 
-    void setPauseMenuSelection(PauseMenuSelection pauseMenuSelection);
+    MainMenuSelection currentMainMenuSelection;
+
+    PauseMenuSelection currentPauseMenuSelection;
 
     //Menü Variables
     bool isMainMenu;
     bool isGameRunning;
     bool isPause;
+    bool isRestart;
+    bool isQuit;
 
 private:
     int selection(int maxOptions);

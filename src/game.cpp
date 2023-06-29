@@ -3,7 +3,6 @@
 void game::init() {
 
     gamestate::init(); //MainMenu
-
     map::init(); //Kitchen Map
 
 }
@@ -12,17 +11,15 @@ void game::update() {
 
     gamestate::update();
 
-    map::update();
-
-}
-
-
-
-game::~game() {
-
+    if (isGameRunning) {
+        map::update();
+    }
 }
 
 void game::draw() {
-    //gamestate::draw();
-    map::draw();
+    gamestate::draw();
+
+    if (isGameRunning){
+        map::draw();
+    }
 }
