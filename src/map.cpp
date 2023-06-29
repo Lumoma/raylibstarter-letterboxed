@@ -1,5 +1,43 @@
 #include "map.h"
 
+void map::init() {
+    setLevelMap(Level::Kitchen);
+}
+
+void map::setLevelMap(Level currentLevel) {
+    switch (currentLevel) {
+        case Level::Kitchen:
+            path = mapPathKitchen;
+            mapTileset = kitchenTileset;
+            break;
+        case Level::Bedroom:
+            path = mapPathBedroom;
+            mapTileset = bedroomTileset;
+            break;
+        case Level::Library:
+            path = mapPathLibrary;
+            mapTileset = libraryTileset;
+            break;
+    }
+    theMap = t.parse(path);
+}
+
+void map::update() {
+
+    // Switch for Collision Layer
+    if (IsKeyPressed(KEY_SPACE))
+        keySwitchCol = !keySwitchCol;
+
+    // Level Map quick change
+    if (IsKeyPressed(KEY_ONE)) {
+        setLevelMap(Level::Kitchen);
+    } else if (IsKeyPressed(KEY_TWO)) {
+        setLevelMap(Level::Bedroom);
+    } else if (IsKeyPressed(KEY_THREE)) {
+        setLevelMap(Level::Library);
+    }
+}
+
 void map::DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex) {
     Rectangle sourceRec {0,0,TILE_SIZE,TILE_SIZE};
     Vector2 destVec{};
@@ -30,7 +68,7 @@ void map::drawMap() {
     }
 }
 
-void map::drawCanvasAndMap() {
+void map::draw() {
     BeginTextureMode(canvas);
     { //Within this block is where we draw our app to the canvas.
         ClearBackground(WHITE);
@@ -48,34 +86,4 @@ void map::drawCanvasAndMap() {
     renderRec.y = (GetScreenHeight() - renderRec.height) / 2.0f;
     DrawTexturePro(canvas.texture, Rectangle{0, 0, (float) canvas.texture.width,(float) -canvas.texture.height},
                    renderRec,{}, 0, WHITE);
-}
-
-void map::setLevelMap(Level currentLevel) {
-    switch (currentLevel) {
-        case Level::Kitchen:
-            path = mapPathKitchen;
-            mapTileset = kitchenTileset;
-            break;
-        case Level::Bedroom:
-            path = mapPathBedroom;
-            mapTileset = bedroomTileset;
-            break;
-        case Level::Library:
-            path = mapPathLibrary;
-            mapTileset = libraryTileset;
-            break;
-    }
-    theMap = t.parse(path);
-}
-
-void map::switchLevelMap() {
-
-    // Level Map quick change
-    if (IsKeyPressed(KEY_ONE)) {
-        setLevelMap(Level::Kitchen);
-    } else if (IsKeyPressed(KEY_TWO)) {
-        setLevelMap(Level::Bedroom);
-    } else if (IsKeyPressed(KEY_THREE)) {
-        setLevelMap(Level::Library);
-    }
 }

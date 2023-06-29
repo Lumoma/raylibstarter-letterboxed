@@ -1,8 +1,8 @@
 #pragma once
 
-#include "draw_func.h"
+#include "includes.h"
 
-class gamestate: public draw_func {
+class gamestate {
 public:
     gamestate(){
         // Menü Textures
@@ -43,11 +43,17 @@ public:
         Quit
     };
 
+    GameState* pGameState;
+
+    void setGameState(GameState gameState);
+
     enum MainMenuSelection {
         M_Start = 0,
         M_Highscore = 1,
         M_Quit = 2
     };
+
+    void setMainMenuSelection(MainMenuSelection mainMenuSelection);
 
     enum PauseMenuSelection {
         P_Continue = 0,
@@ -55,19 +61,15 @@ public:
         P_Quit = 2
     };
 
+    void setPauseMenuSelection(PauseMenuSelection pauseMenuSelection);
+
     //Menü Variables
-    bool isPaused;
-    bool restart;
-    const int mainMenuButtonCount = 3;
-    const int buttonCount = 3;
-    int imainMenuSelectedButton;
-    int iselectedButton;
+    bool isMainMenu;
+    bool isGameRunning;
+    bool isPause;
 
-    GameState gameState;
-    MainMenuSelection mainMenuSelectedButton;
-    PauseMenuSelection selectedButton;
-
-    void setGameState(GameState gameState);
+private:
+    int selection(int maxOptions);
 };
 
 

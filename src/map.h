@@ -1,8 +1,8 @@
 #pragma once
 
-#include "draw_func.h"
+#include "includes.h"
 
-class map : public draw_func {
+class map {
 public:
     map() {
         // Statusbar
@@ -24,11 +24,23 @@ public:
         canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
     }
 
-    void switchLevelMap();
+    ~map() {
+        UnloadTexture(statusBar);
+        UnloadTexture(kitchenTileset);
+        UnloadTexture(bedroomTileset);
+        UnloadTexture(libraryTileset);
+        UnloadRenderTexture(canvas);
+    }
 
-    void drawCanvasAndMap();
+    void init();
+    void update();
+    void draw();
 
-    void setLevelMap(Level currentLevel);
+    enum Level {
+        Kitchen,
+        Bedroom,
+        Library
+    };
 
     // Statusbar
     Texture2D statusBar;
@@ -60,10 +72,9 @@ public:
     bool keySwitchCol = false;
 
 private:
-
     void DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex);
     void drawMap();
-
+    void setLevelMap(Level currentLevel);
 };
 
 
