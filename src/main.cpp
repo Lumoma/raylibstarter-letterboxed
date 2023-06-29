@@ -1,4 +1,4 @@
-﻿#include "includes.h"
+﻿#include "game.h"
 
 int main() {
 
@@ -12,48 +12,26 @@ int main() {
 #endif
     /// Initialization code ///
 
-    // Draw function
-    draw_func draw;
-    draw.initGameStateAndMap();
+    game Game;
+    Game.init();
 
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
-        //Pause Screen Implementation
-        if (IsKeyPressed(KEY_P))
-            draw.isPaused = !draw.isPaused;
-
-        if(!draw.isPaused) {     //pauses the game while being in pause screen
-
-            // Update LevelMap
-            draw.switchLevelMap();
-
-            //Fullscreen logic.
-            if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) {
-                if (IsWindowFullscreen()) {
-                    ToggleFullscreen();
-                    SetWindowSize(Game::ScreenWidth, Game::ScreenHeight);
-                } else {
-                    SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
-                    ToggleFullscreen();
-                }
-            }
-
-            // Switch for Collision Layer
-            if (IsKeyPressed(KEY_SPACE))
-                draw.keySwitchCol = !draw.keySwitchCol;
-        }
+        // Update
+        Game.update();
 
         BeginDrawing();
         // You can draw on the screen between BeginDrawing() and EndDrawing()
         // For the letterbox we draw on canvas instead
-        draw.drawCanvasAndMap();
+        Game.draw();
 
         EndDrawing();
     } // Main game loop end
 
     // De-initialization here
-    draw.~draw_func();
+    Game.~game();
+
 
     // Close window and OpenGL context
     CloseWindow();
