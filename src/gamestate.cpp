@@ -4,7 +4,7 @@ void gamestate::init() {
 
     //main menu init
     setGameState(MainMenu);
-
+    currentMainMenuSelection = M_Start;
 }
 
 void gamestate::setGameState(GameState gameState) {
@@ -57,21 +57,10 @@ void gamestate::setGameState(GameState gameState) {
 
 void gamestate::update() {
 
-    //Fullscreen logic.
-    if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) {
-        if (IsWindowFullscreen()) {
-            ToggleFullscreen();
-            SetWindowSize(Game::ScreenWidth, Game::ScreenHeight);
-        } else {
-            SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
-            ToggleFullscreen();
-        }
-    }
-
     switch (currentGameState) {
 
         case MainMenu:
-
+            currentMainMenuSelection = M_Start;
             currentMainMenuSelection = static_cast<MainMenuSelection>(selection(sizeof(MainMenuSelection)));
             if (IsKeyPressed(KEY_ENTER)){
 
@@ -112,6 +101,7 @@ void gamestate::update() {
         break;
 
         case Pause:
+            currentPauseMenuSelection = P_Continue;
             currentPauseMenuSelection = static_cast<PauseMenuSelection>(selection(sizeof(PauseMenuSelection)));
 
             //Enter Main Menu
@@ -120,13 +110,17 @@ void gamestate::update() {
                 currentGameState = MainMenu;
             }
 
+            if (IsKeyPressed((KEY_P))) {  //for resuming the game
+                currentGameState = GameRunning;
+            }
+
             if (IsKeyPressed(KEY_ENTER)) {
                 if (currentPauseMenuSelection == P_Continue) {
                     setGameState(GameRunning);  //Starting the Game
                 } else if (currentPauseMenuSelection == P_Restart) {
-                    setGameState(GameRunning);  //RESTART button: NOTHING HAPPENS YET, we need to include code for RESTART
-                } else if (currentMainMenuSelection == M_Quit) {
-                    CloseWindow();                //EXIT button
+                    setGameState(Restart);  //RESTART button: NOTHING HAPPENS YET, we need to include code for RESTART
+                } else if (currentPauseMenuSelection == P_Quit) {
+                    setGameState(MainMenu);               //EXIT button
                 }
             }
             isMainMenu = false;
@@ -136,14 +130,14 @@ void gamestate::update() {
             isQuit = false;
         break;
 
-        case Restart:   //does not work yet
-        if (IsKeyPressed(KEY_ENTER))
-            currentGameState = GameRunning;
+        case Restart:
+            setGameState(GameRunning);
             isMainMenu = false;
             isGameRunning = false;
             isPause = false;
             isRestart = true;
             isQuit = false;
+
         break;
 
         case Quit:
@@ -178,14 +172,13 @@ void gamestate::draw() {
 
 
 int gamestate::selection(int maxOptions) {
-    int selectedButton = 0;
     if (IsKeyPressed(KEY_W))
         selectedButton--;
     if (IsKeyPressed(KEY_S))
         selectedButton++;
     if (selectedButton < 0)
-        selectedButton = maxOptions - 1;
-    if (selectedButton >= maxOptions)
+        selectedButton = maxOptions - 2;
+    if (selectedButton == maxOptions)
         selectedButton = 0;
     return selectedButton;
 }

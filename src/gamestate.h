@@ -71,6 +71,7 @@ public:
 
 private:
     int selection(int maxOptions);
+    int selectedButton;
 };
 
 
