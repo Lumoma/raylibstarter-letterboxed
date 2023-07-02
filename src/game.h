@@ -4,10 +4,8 @@
 #include "gamestate.h"
 #include "player.h"
 
-class game: public map, public gamestate, public player {
-
+class game : public map, public gamestate, public player {
 public:
-
     void init();
 
     void update();
@@ -15,6 +13,7 @@ public:
     void draw();
 
 private:
-    
-    bool checkForCollision(int x, int y);
+    void checkPlayerCollision();
+
+    bool checkForCollision(Vector2 CollisionTilePos);
 };

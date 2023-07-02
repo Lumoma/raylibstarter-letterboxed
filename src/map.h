@@ -33,7 +33,9 @@ public:
     }
 
     void init();
+
     void update();
+
     void draw();
 
     enum Level {
@@ -73,7 +75,7 @@ public:
 
 private:
     void DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex);
-    void drawMap();
+
     void setLevelMap(Level currentLevel);
 };
 
