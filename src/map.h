@@ -1,8 +1,9 @@
 #pragma once
 
 #include "includes.h"
+#include "torchAnimation.h"
 
-class map {
+class map: public torchAnimation {
 public:
     map() {
         // Statusbar
@@ -72,6 +73,9 @@ public:
 
     //Switch for Collision Layer
     bool keySwitchCol = false;
+
+    //PLayer Over Torch
+    bool playerOverTorch;
 
 private:
     void DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex);

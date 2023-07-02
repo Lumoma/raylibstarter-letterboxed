@@ -2,6 +2,7 @@
 
 void map::init() {
     setLevelMap(Level::Kitchen);
+    torchAnimation::init();
 }
 
 void map::setLevelMap(Level currentLevel) {
@@ -36,12 +37,14 @@ void map::update() {
     } else if (IsKeyPressed(KEY_THREE)) {
         setLevelMap(Level::Library);
     }
+
+    //Torch Animation
+    torchAnimation::update();
 }
 
 void map::DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex) {
     Rectangle sourceRec{0, 0, TILE_SIZE, TILE_SIZE};
     Vector2 destVec{};
-    const float yOffset = 2 * TILE_SIZE; //offset for the status bar
     int tilesetColumns = 10;
     for (int y = 0; y < TILE_MAP_ROWS; y++) {
         for (int x = 0; x < TILE_MAP_COLUMNS; x++) {
@@ -67,4 +70,5 @@ void map::draw() {
     if (keySwitchCol == 1) {
         DrawLayerFromMap("Collision", theMap.get(), mapTileset); // draw Collision Layer
     }
+    torchAnimation::draw(theMap.get(), playerOverTorch);
 }

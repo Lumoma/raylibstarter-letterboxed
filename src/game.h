@@ -12,8 +12,11 @@ public:
 
     void draw();
 
+
 private:
     void checkPlayerCollision();
 
     bool checkForCollision(Vector2 CollisionTilePos);
+
+    void checkIfPlayerIsOnTorch();
 };
