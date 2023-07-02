@@ -2,8 +2,9 @@
 
 #include "map.h"
 #include "gamestate.h"
+#include "player.h"
 
-class game: public map, public gamestate {
+class game: public map, public gamestate, public player {
 
 public:
 
@@ -13,4 +14,7 @@ public:
 
     void draw();
 
+private:
+    
+    bool checkForCollision(int x, int y);
 };

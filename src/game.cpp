@@ -4,6 +4,7 @@ void game::init() {
 
     gamestate::init(); //MainMenu
     map::init(); //Kitchen Map
+    player::init(); //player
 
 }
 
@@ -13,9 +14,13 @@ void game::update() {
 
     if (isGameRunning) {
         map::update();
+
+
+        player::update();
     }
     else if (isRestart) {
        map::init();
+       player::init();
     }
 }
 
@@ -28,6 +33,7 @@ void game::draw() {
             gamestate::draw();
             if (isGameRunning){
                 map::draw();
+                player::draw();
             }
         }
         EndTextureMode();
@@ -43,5 +49,9 @@ void game::draw() {
                        renderRec,{}, 0, WHITE);
 }
 
+bool game::checkForCollision(int x, int y) {
+    int tileData = map::theMap->getLayer("Collision")->getData()[x + y * 30];
+    return tileData;
+}
 
 
