@@ -56,7 +56,7 @@ void map::DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Text
     }
 }
 
-void map::drawMap() {
+void map::draw() {
     DrawTexture(statusBar, 0, 0, WHITE); // draw status bar
     DrawLayerFromMap("Layer 1", theMap.get(), mapTileset); // draw Layer 1
     DrawLayerFromMap("Layer 2", theMap.get(), mapTileset); // draw Layer 2
@@ -66,24 +66,4 @@ void map::drawMap() {
     if (keySwitchCol == 1){
         DrawLayerFromMap("Collision", theMap.get(), mapTileset); // draw Collision Layer
     }
-}
-
-void map::draw() {
-    BeginTextureMode(canvas);
-    { //Within this block is where we draw our app to the canvas.
-        ClearBackground(WHITE);
-        //Drawing Map
-        map::drawMap();
-    }
-    EndTextureMode();
-    //The following lines put the canvas in the middle of the window and have the negative as black
-    ClearBackground(BLACK);
-    renderScale = std::min(GetScreenHeight() /(float) canvas.texture.height, //Calculates how big or small the canvas has to be rendered.
-                           GetScreenWidth() / (float) canvas.texture.width);
-    renderRec.width = canvas.texture.width * renderScale;
-    renderRec.height = canvas.texture.height * renderScale;
-    renderRec.x = (GetScreenWidth() - renderRec.width) / 2.0f;
-    renderRec.y = (GetScreenHeight() - renderRec.height) / 2.0f;
-    DrawTexturePro(canvas.texture, Rectangle{0, 0, (float) canvas.texture.width,(float) -canvas.texture.height},
-                   renderRec,{}, 0, WHITE);
 }

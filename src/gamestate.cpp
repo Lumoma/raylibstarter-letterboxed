@@ -11,6 +11,7 @@ void gamestate::setGameState(GameState gameState) {
 
     if(gameState == MainMenu){
         currentGameState = MainMenu;
+        currentMainMenuSelection = M_Start;
         isMainMenu = true;
         isGameRunning = false;
         isPause = false;
@@ -57,11 +58,23 @@ void gamestate::setGameState(GameState gameState) {
 
 void gamestate::update() {
 
+    //Fullscreen logic.
+    if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_F)) {
+        if (IsWindowFullscreen()) {
+            ToggleFullscreen();
+            SetWindowSize(Game::ScreenWidth, Game::ScreenHeight);
+        } else {
+            SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
+            ToggleFullscreen();
+        }
+    }
+
     switch (currentGameState) {
 
         case MainMenu:
-            currentMainMenuSelection = M_Start;
+
             currentMainMenuSelection = static_cast<MainMenuSelection>(selection(sizeof(MainMenuSelection)));
+
             if (IsKeyPressed(KEY_ENTER)){
 
                 if (currentMainMenuSelection == M_Start){
@@ -74,79 +87,46 @@ void gamestate::update() {
                     setGameState(Quit);
                 }
             }
-            isMainMenu = true;
-            isGameRunning = false;
-            isPause = false;
-            isRestart = false;
-            isQuit = false;
         break;
 
         case GameRunning:
             //Enter Pause Menu
             if (isMainMenu == 0 && isGameRunning == 1 && IsKeyPressed(KEY_P)){
-                isPause = true;
-                isGameRunning = false;
-                isMainMenu = false;
-                currentGameState = Pause;
+                setGameState(Pause);
             }
 
             if (IsKeyPressed(KEY_P)) {  //for pausing the game
-                currentGameState = Pause;
+                setGameState(Pause);
             }
-            isMainMenu = false;
-            isGameRunning = true;
-            isPause = false;
-            isRestart = false;
-            isQuit = false;
+
         break;
 
         case Pause:
             currentPauseMenuSelection = P_Continue;
             currentPauseMenuSelection = static_cast<PauseMenuSelection>(selection(sizeof(PauseMenuSelection)));
 
-            //Enter Main Menu
-            if (isPause == 1 && isGameRunning == 0 && IsKeyPressed(KEY_M)){
-                isMainMenu = true;
-                currentGameState = MainMenu;
-            }
-
             if (IsKeyPressed((KEY_P))) {  //for resuming the game
-                currentGameState = GameRunning;
+                    setGameState(GameRunning);
             }
-
-            if (IsKeyPressed(KEY_ENTER)) {
-                if (currentPauseMenuSelection == P_Continue) {
+            if (IsKeyPressed(KEY_ENTER)&& currentPauseMenuSelection == P_Continue) {
                     setGameState(GameRunning);  //Starting the Game
-                } else if (currentPauseMenuSelection == P_Restart) {
-                    setGameState(Restart);  //RESTART button: NOTHING HAPPENS YET, we need to include code for RESTART
-                } else if (currentPauseMenuSelection == P_Quit) {
-                    setGameState(MainMenu);               //EXIT button
-                }
             }
-            isMainMenu = false;
-            isGameRunning = false;
-            isPause = true;
-            isRestart = false;
-            isQuit = false;
+            else if (IsKeyPressed(KEY_ENTER)&& currentPauseMenuSelection == P_Restart) {
+                    setGameState(Restart);  //Restarting the Game
+            }
+            else if ((IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_M)) && currentPauseMenuSelection == P_Quit) {
+                    setGameState(MainMenu);//Quitting to MainMenu
+            }
         break;
 
         case Restart:
             setGameState(GameRunning);
-            isMainMenu = false;
-            isGameRunning = false;
-            isPause = false;
-            isRestart = true;
-            isQuit = false;
 
         break;
 
         case Quit:
+            setGameState(Quit);
             CloseWindow();
-            isMainMenu = false;
-            isGameRunning = false;
-            isPause = false;
-            isRestart = false;
-            isQuit = true;
         break;
     }
 
@@ -154,22 +134,24 @@ void gamestate::update() {
 
 void gamestate::draw() {
 
-    if (currentMainMenuSelection == M_Start)
-        DrawTexture(mainMenuStart, 0, 0, WHITE);
-    else if (currentMainMenuSelection == M_Highscore)
-        DrawTexture(mainMenuHighscore, 0, 0, WHITE);
-    else if (currentMainMenuSelection == M_Quit)
-        DrawTexture(mainMenuQuit, 0, 0, WHITE);
+    if(currentGameState == MainMenu){
+        if (currentMainMenuSelection == M_Start)
+            DrawTexture(mainMenuStart, 0, 0, WHITE);
+        else if (currentMainMenuSelection == M_Highscore)
+            DrawTexture(mainMenuHighscore, 0, 0, WHITE);
+        else if (currentMainMenuSelection == M_Quit)
+            DrawTexture(mainMenuQuit, 0, 0, WHITE);
+    }
 
-    if(currentPauseMenuSelection == P_Continue)
-        DrawTexture(pauseScreenContinue, 0, 0, WHITE);
-    else if(currentPauseMenuSelection == P_Restart)
-        DrawTexture(pauseScreenRestart, 0, 0, WHITE);
-    else if(currentPauseMenuSelection == P_Quit)
-        DrawTexture(pauseScreenQuit, 0, 0, WHITE);
-
+    else if(currentGameState == Pause){
+        if(currentPauseMenuSelection == P_Continue)
+            DrawTexture(pauseScreenContinue, 0, 0, WHITE);
+        else if(currentPauseMenuSelection == P_Restart)
+            DrawTexture(pauseScreenRestart, 0, 0, WHITE);
+        else if(currentPauseMenuSelection == P_Quit)
+            DrawTexture(pauseScreenQuit, 0, 0, WHITE);
+    }
 }
-
 
 int gamestate::selection(int maxOptions) {
     if (IsKeyPressed(KEY_W))
@@ -178,7 +160,7 @@ int gamestate::selection(int maxOptions) {
         selectedButton++;
     if (selectedButton < 0)
         selectedButton = maxOptions - 2;
-    if (selectedButton == maxOptions)
+    if (selectedButton == maxOptions - 1)
         selectedButton = 0;
     return selectedButton;
 }
