@@ -12,6 +12,9 @@ public:
 
     void draw();
 
+    bool isPlayerOnTorch;
+    bool isTorchLit;
+
 
 private:
     void checkPlayerCollision();

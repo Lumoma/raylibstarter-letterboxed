@@ -13,7 +13,9 @@ void game::update() {
     if (isGameRunning) {
         map::update();
         checkPlayerCollision();
-        checkIfPlayerIsOnTorch();
+        if (IsKeyPressed(KEY_E)) {
+            isTorchLit = true;
+        };
         player::update();
     } else if (isRestart) {
         map::init();
@@ -30,6 +32,7 @@ void game::draw() {
         gamestate::draw();
         if (isGameRunning) {
             map::draw();
+            map::drawTorchAnimation(currentPos, isPlayerOnTorch, isTorchLit);
             player::draw();
             player::drawPosStats();
         }
@@ -59,14 +62,6 @@ void game::checkPlayerCollision() {
     collisionSouth = checkForCollision({player::tilePos.x, player::tilePos.y + 1});
     collisionEast = checkForCollision({player::tilePos.x + 1, player::tilePos.y});
     collisionWest = checkForCollision({player::tilePos.x - 1, player::tilePos.y});
-}
-
-void game::checkIfPlayerIsOnTorch() {
-    if (player::currentPos.x == map::torchAnimationDestVec.x && player::currentPos.y == map::torchAnimationDestVec.y) {
-        playerOverTorch = true;
-    } else {
-        playerOverTorch = false;
-    }
 }
 
 

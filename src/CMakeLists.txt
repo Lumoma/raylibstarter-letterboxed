@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(${PROJECT_NAME} main.cpp defines.h includes.h gamestate.cpp gamestate.h map.cpp map.h game.cpp game.h character.h character.cpp player.h player.cpp torchAnimation.cpp torchAnimation.h)
+add_executable(${PROJECT_NAME} main.cpp defines.h includes.h gamestate.cpp gamestate.h map.cpp map.h game.cpp game.h character.h character.cpp player.h player.cpp)
 
 # Add config.h.in file
 configure_file(config.h.in config.h)

@@ -5,3 +5,4 @@
 #include "tileson.hpp"
 #include "config.h"
 #include "defines.h"
+#include <vector>

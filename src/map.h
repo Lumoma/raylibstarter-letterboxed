@@ -1,9 +1,8 @@
 #pragma once
 
 #include "includes.h"
-#include "torchAnimation.h"
 
-class map: public torchAnimation {
+class map {
 public:
     map() {
         // Statusbar
@@ -23,6 +22,10 @@ public:
 
         // Canvas
         canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
+
+        // Torch Animation
+        torchBurningSpitesheet = LoadTexture("assets/torch.png");
+        torchLitSpitesheet = LoadTexture("assets/torch_lit.png");
     }
 
     ~map() {
@@ -31,6 +34,8 @@ public:
         UnloadTexture(bedroomTileset);
         UnloadTexture(libraryTileset);
         UnloadRenderTexture(canvas);
+        UnloadTexture(torchBurningSpitesheet);
+        UnloadTexture(torchLitSpitesheet);
     }
 
     void init();
@@ -74,13 +79,32 @@ public:
     //Switch for Collision Layer
     bool keySwitchCol = false;
 
+    //Torch Animation
     //PLayer Over Torch
-    bool playerOverTorch;
+    struct Torch {
+        int id;
+        Vector2 position;
+    };
+
+    std::vector<Torch> torches;
+
+    Texture2D torchBurningSpitesheet;
+    Texture2D torchLitSpitesheet;
+
+    int framesCounter;
+    int framesSpeed;
+    int currentTorchFrame;
+    int currentLitFrame;
+    void drawTorchAnimation(Vector2 playerPos, bool isPlayerOverTorch, bool isEnterKeyPressed);
 
 private:
     void DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex);
 
     void setLevelMap(Level currentLevel);
+
+
+
+
 };
 
 
