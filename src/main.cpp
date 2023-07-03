@@ -15,7 +15,7 @@ int main() {
     Game.init();
 
     // Main game loop
-    while (!WindowShouldClose()) // Detect window close button or ESC key
+    while (!WindowShouldClose() && Game.currentGameState != gamestate::Quit) // Detect window close button or ESC key
     {
         Game.update();
 
@@ -31,6 +31,5 @@ int main() {
 
     // Close window and OpenGL context
     CloseWindow();
-
-    return EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }

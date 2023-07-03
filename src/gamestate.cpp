@@ -126,7 +126,6 @@ void gamestate::update() {
 
         case Quit:
             setGameState(Quit);
-            CloseWindow();
         break;
     }
 
@@ -150,6 +149,10 @@ void gamestate::draw() {
             DrawTexture(pauseScreenRestart, 0, 0, WHITE);
         else if(currentPauseMenuSelection == P_Quit)
             DrawTexture(pauseScreenQuit, 0, 0, WHITE);
+    }
+
+    else{
+        ClearBackground(RED);
     }
 }
 
