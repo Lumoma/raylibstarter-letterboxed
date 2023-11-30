@@ -7,3 +7,5 @@
 
 #define Y_OFFSET_STATUSBAR  64
 
+#define TILESET_COLUMNS     10
+

@@ -24,8 +24,8 @@ public:
         canvas = LoadRenderTexture(Game::ScreenWidth, Game::ScreenHeight);
 
         // Torch Animation
-        torchBurningSpitesheet = LoadTexture("assets/torch.png");
-        torchLitSpitesheet = LoadTexture("assets/torch_lit.png");
+        torchBurningSpitesheet = LoadTexture("assets/graphics/Spritesheets/Torch_burning.png");
+        torchLitSpitesheet = LoadTexture("assets/graphics/Spritesheets/Torch_lighting_up.png");
     }
 
     ~map() {
@@ -86,6 +86,8 @@ public:
         Vector2 position;
     };
 
+    Torch torch;
+
     std::vector<Torch> torches;
 
     Texture2D torchBurningSpitesheet;
@@ -95,7 +97,12 @@ public:
     int framesSpeed;
     int currentTorchFrame;
     int currentLitFrame;
-    void drawTorchAnimation(Vector2 playerPos, bool isPlayerOverTorch, bool isEnterKeyPressed);
+
+    void initTorchPositions();
+
+    void updateTorchAnimation();
+
+    void drawTorchAnimation(Vector2 playerPos,bool isEKeyPressed);
 
 private:
     void DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex);

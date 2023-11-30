@@ -39,17 +39,6 @@ void map::update() {
     } else if (IsKeyPressed(KEY_THREE)) {
         setLevelMap(Level::Library);
     }
-
-    //Torch Animation
-    framesCounter++;
-    if (framesCounter >= (60 / framesSpeed)) {
-        framesCounter = 0;
-        currentTorchFrame++;
-        if (currentTorchFrame > 4)
-            currentTorchFrame = 0;
-    }
-    currentLitFrame = currentTorchFrame;
-
 }
 
 void map::DrawLayerFromMap(const std::string &layername, tson::Map *theMap, Texture &mapTex) {
@@ -82,20 +71,14 @@ void map::draw() {
     }
 }
 
-void map::drawTorchAnimation(Vector2 playerPos, bool isPlayerOverTorch, bool isEnterKeyPressed) {
-    Rectangle frameRecBurning = {0.0f, 0.0f, TILE_SIZE, TILE_SIZE};
-    Rectangle frameRecLit = {0.0f, 0.0f, TILE_SIZE, TILE_SIZE};
-    Vector2 destVec{};
-    int tilesetColumns = 10;
-    bool isBurningAnimationFinished = currentTorchFrame >= 4;
 
+void map::initTorchPositions() {
     for (int y = 0; y < TILE_MAP_ROWS; y++) {
         for (int x = 0; x < TILE_MAP_COLUMNS; x++) {
             int tileData = theMap->getLayer("Torch")->getData()[x + y * TILE_MAP_COLUMNS] - 1; // -1 because tiled does stuff >:(
             if (tileData < 0)
                 continue;
 
-            Torch torch;
             torch.id = tileData;
             torch.position.x = x * TILE_SIZE;
             torch.position.y = Y_OFFSET_STATUSBAR + y * TILE_SIZE;
@@ -103,32 +86,32 @@ void map::drawTorchAnimation(Vector2 playerPos, bool isPlayerOverTorch, bool isE
             torches.push_back(torch); // Füge die Fackel zum Array hinzu
         }
     }
+}
 
-    // Schleife zum Zeichnen der Animationen basierend auf den Positionen im Array
-    for (const auto& torch : torches) {
-        int torchId = torch.id;
-        Vector2 torchPosition = torch.position;
-
-        frameRecBurning.x = (torchId % tilesetColumns) * TILE_SIZE;
-        frameRecBurning.y = (torchId / tilesetColumns) * TILE_SIZE;
-        frameRecLit.x = frameRecBurning.x;
-        frameRecLit.y = frameRecBurning.y;
-
-        // Überprüfe, ob der Spieler über der Fackel steht und die Enter-Taste gedrückt hat
-        if (isPlayerOverTorch && isEnterKeyPressed && playerPos.x == torchPosition.x && playerPos.y == torchPosition.y) {
-            if (isBurningAnimationFinished) {
-                // Zeichne die leuchtende Fackel-Animation
-                frameRecLit.x += (float)currentLitFrame * 32;
-                DrawTextureRec(torchLitSpitesheet, frameRecLit, torchPosition, WHITE);
-            } else {
-                // Zeichne die brennende Fackel-Animation
-                frameRecBurning.x += (float)currentTorchFrame * 32;
-                DrawTextureRec(torchBurningSpitesheet, frameRecBurning, torchPosition, WHITE);
-            }
-        } else {
-            // Zeichne die brennende Fackel-Animation
-            frameRecBurning.x += (float)currentTorchFrame * 32;
-            DrawTextureRec(torchBurningSpitesheet, frameRecBurning, torchPosition, WHITE);
+void map::updateTorchAnimation() {
+    if (currentTorchFrame >= 4) {
+        currentLitFrame++;
+        if (currentLitFrame >= 4) {
+            currentLitFrame = 0;
+        }
+    } else {
+        currentTorchFrame++;
+        if (currentTorchFrame >= 4) {
+            currentTorchFrame = 0;
         }
     }
 }
+
+void map::drawTorchAnimation(Vector2 playerPos, bool isEKeyPressed) {
+    for (const auto& torch : torches) {
+        Rectangle frameRecBurning = { (float)currentTorchFrame * 32, (float)(torch.id / 10) * 32, 32, 32 };
+        Rectangle frameRecLit = { (float)currentLitFrame * 32, (float)(torch.id / 10) * 32, 32, 32 };
+
+        if (currentTorchFrame >= 4 ) {
+            DrawTextureRec(torchLitSpitesheet, frameRecLit, torch.position, WHITE);
+        } else {
+            DrawTextureRec(torchBurningSpitesheet, frameRecBurning, torch.position, WHITE);
+        }
+    }
+}
+

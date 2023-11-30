@@ -3,6 +3,7 @@
 void game::init() {
     gamestate::init(); //MainMenu
     map::init(); //Kitchen Map
+    map::initTorchPositions();
     player::init(); //player
 
 }
@@ -12,10 +13,15 @@ void game::update() {
     gamestate::update();
     if (isGameRunning) {
         map::update();
+        map::updateTorchAnimation();
         checkPlayerCollision();
         if (IsKeyPressed(KEY_E)) {
             isTorchLit = true;
-        };
+        }
+        else {
+            isTorchLit = false;
+        }
+
         player::update();
     } else if (isRestart) {
         map::init();
@@ -32,7 +38,7 @@ void game::draw() {
         gamestate::draw();
         if (isGameRunning) {
             map::draw();
-            map::drawTorchAnimation(currentPos, isPlayerOnTorch, isTorchLit);
+            map::drawTorchAnimation(currentPos, isTorchLit);
             player::draw();
             player::drawPosStats();
         }

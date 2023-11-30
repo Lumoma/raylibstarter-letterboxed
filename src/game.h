@@ -21,5 +21,4 @@ private:
 
     bool checkForCollision(Vector2 CollisionTilePos);
 
-    void checkIfPlayerIsOnTorch();
 };
